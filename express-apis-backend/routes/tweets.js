@@ -2,9 +2,10 @@ const express = require('express');
 const { check } = require('express-validator');
 
 const db = require('../db/models');
-const { Tweet } = db;
 
+const { Tweet } = db;
 const { asyncHandler, handleValidationErrors } = require('../utils');
+const { requireAuth } = require('../auth');
 
 const tweetNotFound = (id) => {
   const err = Error(`Tweet with id of ${id} could not be found`);
@@ -14,6 +15,8 @@ const tweetNotFound = (id) => {
 };
 
 const router = express.Router();
+
+router.use(requireAuth);
 
 router.get('/', asyncHandler(async (req, res) => {
   const tweets = await Tweet.findAll();
