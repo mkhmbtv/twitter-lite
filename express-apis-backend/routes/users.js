@@ -47,4 +47,26 @@ router.post('/',
     });
   }));
 
+router.post('/token', 
+  validateEmailAndPassword,
+  handleValidationErrors,
+  asyncHandler(async (req, res, next) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+
+    if (!user || !user.validatePassword(password)) {
+      const err = Error('Login failed');
+      err.status = 401;
+      err.title = 'Login failed';
+      err.errors = ['The provided credentials were invalid.'];
+      return next(err);
+    }
+
+    const token = getUserToken(user);
+    res.json({
+      user: { id: user.id },
+      token,
+    });
+  }));
+
 module.exports = router;

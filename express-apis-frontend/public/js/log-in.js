@@ -1,16 +1,15 @@
-const signUpForm = document.querySelector('.sign-up-form');
+const logInForm = document.querySelector('.log-in-form');
 
-signUpForm.addEventListener('submit', async (e) => {
+logInForm.addEventListener('submit', async (e) => {
   e.preventDefault();
- 
-  const formData = new FormData(signUpForm);
+
+  const formData = new FormData(logInForm);
   const email = formData.get('email');
   const password = formData.get('password');
-  const username = formData.get('username');
-  const body = { email, password, username };
+  const body = { email, password };
 
   try {
-    const res = await fetch('http://localhost:8080/users', {
+    const res = await fetch('http://localhost:8080/users/token', {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
@@ -35,13 +34,12 @@ signUpForm.addEventListener('submit', async (e) => {
       const errorJSON = await err.json();
       const errorsContainer = document.querySelector('.errors-container');
       let errorsHtml = [
-        `
-          <div class="alert alert-danger">
+        ` <div class="alert alert-danger">
             Something went wrong. Please try again.
           </div>
         `,
       ];
-      
+
       const { errors } = errorJSON;
       if (errors && Array.isArray(errors)) {
         errorsHtml = errors.map((message) => `
@@ -51,8 +49,7 @@ signUpForm.addEventListener('submit', async (e) => {
         `
         );
       }
-
-      errorsContainer.innerHTML = errorsHtml.join('');
+      errorsContainer.innerHTML = errorsHtml;
     } else {
       alert(
         'Something went wrong. Please check your internet connection and try again!'
