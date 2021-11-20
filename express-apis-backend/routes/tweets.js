@@ -50,7 +50,7 @@ router.post('/', validateTweet, handleValidationErrors,
   asyncHandler(async (req, res) => {
     const { message } = req.body;
     const tweet = await Tweet.create({ message, userId: req.user.id });
-    res.json(tweet);
+    res.json({ tweet });
   }));
 
 router.put('/:id(\\d+)', validateTweet, handleValidationErrors,

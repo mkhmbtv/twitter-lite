@@ -19,7 +19,11 @@ app.get('/sign-up', (req, res) => {
 
 app.get('/log-in', (req, res) => {
   res.render('log-in');
-})
+});
+
+app.get('/create', (req, res) => {
+  res.render('create');
+});
 
 // Define a port and start listening for connections.
 const port = 4000;
