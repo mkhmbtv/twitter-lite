@@ -3,10 +3,10 @@ const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 
 const db = require('../db/models');
-const { User } = db;
+const { User, Tweet } = db;
 
 const { asyncHandler, handleValidationErrors } = require('../utils');
-const { getUserToken } = require('../auth');
+const { getUserToken, requireAuth } = require('../auth');
 
 const router = express.Router();
 
@@ -67,6 +67,18 @@ router.post('/token',
       user: { id: user.id },
       token,
     });
+  }));
+
+router.get('/:id(\\d+)/tweets',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const userId = parseInt(req.params.id, 10);
+    const tweets = await Tweet.findAll({ 
+      where: { userId },
+      order: [['createdAt', 'DESC']],
+    });
+
+    res.json({ tweets });
   }));
 
 module.exports = router;
