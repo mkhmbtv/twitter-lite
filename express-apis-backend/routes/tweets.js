@@ -71,8 +71,16 @@ router.delete('/:id(\\d+)', asyncHandler(async (req, res, next) => {
   const tweet = await Tweet.findByPk(tweetId);
 
   if (tweet) {
-    await tweet.destroy();
-    res.status(204).end();
+    if (req.user.id === tweet.userId) {
+      await tweet.destroy();
+      res.status(204).end();
+    } else {
+      const err = Error('Unauthorized');
+      err.title = 'Unauthorized';
+      err.message = 'You are not allowed to perform this action';
+      err.status = 401;
+      next(err);
+    }
   } else {
     next(tweetNotFound(tweetId));
   }
