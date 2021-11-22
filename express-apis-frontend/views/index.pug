@@ -2,5 +2,11 @@ extends layout.pug
 
 block content
   h1 Hello World!
+  .errors-container
+  form(class="create-form mb-3")
+    .form-group
+      label(for="message") Message
+      input#message.form-control(type="text" name="message" placeholder="What do you want to tweet?")
+    button.btn.btn-primary(type="submit") Tweet
   div#tweets-container
-  script(src="js/index.js")
+  script(src="js/index.js" type="module")
